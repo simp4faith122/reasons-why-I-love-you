@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hi bae, today i wanna show you reasons why i lovvveee youuuu😝💞</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fce4ec;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        h1 {
+            color: #e91e63;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+        .reason-container {
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .reason {
+            font-size: 1.5rem;
+            color: #333;
+            margin: 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+        .reason.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .btn {
+            background-color: #e91e63;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background-color: #c2185b;
+            transform: scale(1.05);
+        }
+        .btn:disabled {
+            background-color: #e0e0e0;
+            cursor: not-allowed;
+            transform: scale(1);
+        }
+        .progress {
+            height: 6px;
+            background-color: #f8bbd0;
+            border-radius: 3px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #e91e63;
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+        }
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            opacity: 0;
+        }
+        .heart:before, .heart:after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 32px;
+            background-color: #ff4081;
+            border-radius: 32px 32px 0 0;
+        }
+        .heart:before {
+            transform: rotate(-45deg);
+            transform-origin: 100% 100%;
+        }
+        .heart:after {
+            transform: rotate(45deg);
+            transform-origin: 0 100%;
+        }
+        .final-message {
+            display: none;
+            font-size: 1.8rem;
+            color: #e91e63;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .photo-container {
+            margin-top: 30px;
+            display: none;
+            justify-content: center;
+        }
+        .placeholder-photo {
+            width: 220px;
+            height: 160px;
+            background-color: #f8bbd0;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #e91e63;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Hi bae, today i wanna show you reasons why i lovvveee youuuu😝💞</h1>
+        <div class="reason-container">
+            <p id="reason" class="reason">Click the button to see why I love you!</p>
+        </div>
+        <div class="progress">
+            <div id="progress-bar" class="progress-bar"></div>
+        </div>
+        <button id="next-btn" class="btn">Show Me Why</button>
+        <div class="hearts" id="hearts"></div>
+        <p id="final-message" class="final-message">You mean everything to me! ❤️</p>
+        <div id="peonies.jpeg" class="photo-container">
+            <div class="placeholder-photo"><img src="peonies.jpeg" alt="pic"></div>
+        </div>
+    </div>
+    <div style="position: absolute; bottom: 10px; right: 15px; font-family: 'Brush Script MT', cursive; color: #e91e63; font-size: 14px; opacity: 0.8;">
+        made by Faith's boyfriend...robin.
+    </div>
+
+    <script>
+        const reasons = [
+            "your beautiful smile lights up my day fr",
+            "the way you make me laugh even when I'm sad",
+            "how we can talk for 5 hours straight and it feels like 5 minutes,idk but i wanna spend my life w you!",
+            "your pretty eyes that I could stare into forever",
+            "the way you were brave enough to ask me out first😭",
+            "how comfortable I feel being myself around you",
+            "your amazing personality that matches so well with mine,idk but the way we click is insane",
+            "the way you make my heart race whenever we talk cause damn",
+            "how you understand me like no one else does",
+            "Because every moment with you feels special",
+            "the way you carry yourself as a female and actually having discipline alongside principles and mortalities🙇🏽‍♂️❤️",
+            "you send me tiktoks & reels😂"
+            // You can add more reasons that are personal to you!
+        ];
+
+        const reasonElement = document.getElementById('reason');
+        const nextButton = document.getElementById('next-btn');
+        const progressBar = document.getElementById('progress-bar');
+        const finalMessage = document.getElementById('final-message');
+        const photoContainer = document.getElementById('photo-container');
+        const heartsContainer = document.getElementById('hearts');
+
+        let currentIndex = 0;
+
+        nextButton.addEventListener('click', () => {
+            // Create floating hearts
+            createHearts();
+            
+            if (currentIndex < reasons.length) {
+                // Display current reason with animation
+                reasonElement.classList.remove('active');
+                
+                setTimeout(() => {
+                    reasonElement.textContent = reasons[currentIndex];
+                    reasonElement.classList.add('active');
+                    
+                    // Update progress bar
+                    const progress = ((currentIndex + 1) / reasons.length) * 100;
+                    progressBar.style.width = `${progress}%`;
+                    
+                    currentIndex++;
+                    
+                    // If all reasons shown, show final message
+                    if (currentIndex === reasons.length) {
+                        nextButton.textContent = "I Love You";
+                        nextButton.addEventListener('click', showFinalMessage, { once: true });
+                    }
+                }, 300);
+            }
+        });
+
+        function showFinalMessage() {
+            reasonElement.classList.remove('active');
+            setTimeout(() => {
+                reasonElement.style.display = 'none';
+                finalMessage.style.display = 'block';
+                nextButton.style.display = 'none';
+                photoContainer.style.display = 'flex';
+                createManyHearts();
+            }, 300);
+        }
+
+        function createHearts() {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart');
+                    
+                    // Random position
+                    const startX = Math.random() * 100;
+                    heart.style.left = `${startX}%`;
+                    heart.style.bottom = '0%';
+                    
+                    heartsContainer.appendChild(heart);
+                    
+                    // Animate heart
+                    setTimeout(() => {
+                        heart.style.opacity = '0.7';
+                        heart.style.bottom = '100%';
+                        heart.style.transform = `translateX(${Math.random() * 50 - 25}px)`;
+                        heart.style.transition = `all ${Math.random() * 2 + 3}s ease-out`;
+                        
+                        // Remove heart after animation
+                        setTimeout(() => {
+                            heartsContainer.removeChild(heart);
+                        }, 3000);
+                    }, 10);
+                }, i * 200);
+            }
+        }
+
+        function createManyHearts() {
+            for (let i = 0; i < 30; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart');
+                    
+                    // Random position
+                    const startX = Math.random() * 100;
+                    heart.style.left = `${startX}%`;
+                    heart.style.bottom = '0%';
+                    
+                    heartsContainer.appendChild(heart);
+                    
+                    // Animate heart
+                    setTimeout(() => {
+                        heart.style.opacity = '0.7';
+                        heart.style.bottom = '120%';
+                        heart.style.transform = `translateX(${Math.random() * 100 - 50}px)`;
+                        heart.style.transition = `all ${Math.random() * 3 + 4}s ease-out`;
+                        
+                        // Remove heart after animation
+                        setTimeout(() => {
+                            heartsContainer.removeChild(heart);
+                        }, 5000);
+                    }, 10);
+                }, i * 100);
+            }
+        }
+    </script>
+</body>
+</html>
